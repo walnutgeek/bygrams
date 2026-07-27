@@ -35,3 +35,11 @@ _Avoid_: adjusting, resizing
 **Anchor Ingredient**:
 The ingredient line a user selects as the basis for "I have X of this" scaling. Must have a parseable numeric amount.
 _Avoid_: base ingredient, reference ingredient
+
+**Folder Tag**:
+An automatic tag derived from a recipe file's subdirectory path within the repo. Added implicitly — not stored in the YAML.
+_Avoid_: implicit tag, directory tag
+
+**Total Ingredients**:
+A merged and summed view of all ingredient lines across a recipe's actions. Matching ingredients (same unit and item) are combined into a single line.
+_Avoid_: ingredient summary, shopping list
