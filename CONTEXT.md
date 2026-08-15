@@ -24,6 +24,10 @@ _Avoid_: citation, reference, link
 A free-form label on a recipe used for filtering. Typically describes equipment, cuisine, or meal type.
 _Avoid_: category, label
 
+**Recipe Repo**:
+A public GitHub repo holding a cook's recipes as YAML files, optionally organised into subdirectories and optionally carrying a repo-level conversion table. Stands on its own — the app reads it but does not own it.
+_Avoid_: recipe collection, cookbook, source repo
+
 **Conversion Table**:
 A repo-level YAML file mapping ingredient aliases and volume/count units to gram weights, used to offer gram equivalents in the app.
 _Avoid_: density table, unit map

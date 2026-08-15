@@ -15,6 +15,25 @@ An Android app for viewing and scaling recipes stored as YAML files in a public 
 
 Recipes are YAML files following a [simple schema](docs/recipe-schema.md). See [walnutgeek/recipes](https://github.com/walnutgeek/recipes) for an example repo.
 
+## Converting recipes with Claude
+
+This repo publishes two Claude Code skills for working with recipe repos. Install them
+into your recipe repo with the [`skills`](https://github.com/vercel-labs/skills) CLI:
+
+```bash
+cd your-recipes
+npx skills@latest add walnutgeek/ByGrams
+```
+
+- **`/setup-recipe-repo`** — run once. Writes the repo conventions agents need (notably
+  that subdirectories become tags) and can seed starter recipes from
+  [walnutgeek/recipes](https://github.com/walnutgeek/recipes).
+- **`convert-recipe`** — paste a recipe, or give it a URL, and it produces a YAML file
+  in the [schema](docs/recipe-schema.md). Invoked automatically when you paste a recipe.
+
+Installing into the recipe repo (rather than globally, with `-g`) keeps the skills
+alongside the recipes they operate on, so anyone cloning your recipes gets the tooling too.
+
 ## Setup
 
 Point the app at your GitHub repo as `owner/repo` (e.g., `walnutgeek/recipes`). Recipes are fetched from the `main` branch by default — specify a different branch with `owner/repo:branch`.

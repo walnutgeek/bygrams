@@ -3,11 +3,11 @@ name: convert-recipe
 description: Convert free-form text or non-conforming YAML into the canonical ByGrams recipe schema. Use when the user pastes a recipe, provides a URL, or asks to normalize an existing recipe file.
 ---
 
-Convert the input into a valid ByGrams recipe YAML file following the schema in `docs/recipe-schema.md`.
+Convert the input into a valid ByGrams recipe YAML file following the schema in `recipe-schema.md`, next to this file.
 
 ## Steps
 
-1. **Read the schema** — read `docs/recipe-schema.md` to get the current canonical format.
+1. **Read the schema** — read `recipe-schema.md` in this skill's own directory to get the canonical format.
 
 2. **Parse the input** — the input may be:
    - Free-form text (pasted from a website, typed from memory)
