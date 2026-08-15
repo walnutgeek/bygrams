@@ -22,7 +22,7 @@ into your recipe repo with the [`skills`](https://github.com/vercel-labs/skills)
 
 ```bash
 cd your-recipes
-npx skills@latest add walnutgeek/ByGrams
+npx skills@latest add walnutgeek/bygrams
 ```
 
 - **`/setup-recipe-repo`** — run once. Writes the repo conventions agents need (notably
