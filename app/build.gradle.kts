@@ -30,7 +30,7 @@ android {
         applicationId = "com.walnutgeek.bygrams"
         minSdk = 26
         targetSdk = 35
-        versionCode = 2
+        versionCode = 3
         versionName = "1.0.1"
     }
 
