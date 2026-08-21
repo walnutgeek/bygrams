@@ -1,6 +1,9 @@
 package com.walnutgeek.bygrams.ui
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,14 +26,19 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.walnutgeek.bygrams.R
 
 /** Repo root — also the base every documentation anchor hangs off. */
 const val SOURCE_URL = "https://github.com/walnutgeek/bygrams"
@@ -72,7 +80,15 @@ fun AboutScreen(onBack: () -> Unit) {
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 24.dp)
         ) {
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(16.dp))
+
+            AppIcon(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .size(72.dp)
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
 
             Text(
                 text = "ByGrams reads recipes from a public GitHub repo you control. " +
@@ -128,6 +144,30 @@ fun AboutScreen(onBack: () -> Unit) {
             )
             Spacer(modifier = Modifier.height(24.dp))
         }
+    }
+}
+
+/**
+ * The launcher icon, rebuilt from its adaptive layers.
+ *
+ * `painterResource` can't load an AdaptiveIconDrawable, so the two layers are composed
+ * here instead. The foreground vector is a 108dp canvas of which only the centre 72dp is
+ * ever shown, so it's drawn at 1.5x the tile and clipped — the same framing a launcher
+ * applies, which keeps this identical to the homescreen icon.
+ */
+@Composable
+private fun AppIcon(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .clip(CircleShape)
+            .background(colorResource(R.color.ic_launcher_background)),
+        contentAlignment = Alignment.Center
+    ) {
+        Image(
+            painter = painterResource(R.drawable.ic_launcher_foreground),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(108f / 72f)
+        )
     }
 }
 
