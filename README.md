@@ -75,6 +75,11 @@ Requires JDK 17+ and the Android SDK. The project uses the Gradle wrapper, so no
 ./gradlew testDebugUnitTest assembleDebug
 ```
 
+## Releasing
+
+`./scripts/release.sh` builds a signed App Bundle for the Play Store. It needs an
+upload key, which it will not create for you — see [docs/release.md](docs/release.md).
+
 If using the JDK bundled with Android Studio:
 
 ```bash

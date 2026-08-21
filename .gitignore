@@ -11,3 +11,8 @@ local.properties
 .scratch/
 .superpowers/
 
+
+# Signing material - never commit these
+keystore.properties
+*.jks
+*.keystore
