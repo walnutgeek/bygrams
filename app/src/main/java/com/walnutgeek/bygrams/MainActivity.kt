@@ -15,6 +15,7 @@ import com.walnutgeek.bygrams.data.GitHubApi
 import com.walnutgeek.bygrams.data.RecipeCache
 import com.walnutgeek.bygrams.data.RecipeRepository
 import com.walnutgeek.bygrams.data.RepoConfigStore
+import com.walnutgeek.bygrams.ui.AboutScreen
 import com.walnutgeek.bygrams.ui.RecipeDetailScreen
 import com.walnutgeek.bygrams.ui.RecipeListScreen
 import com.walnutgeek.bygrams.ui.RecipeListViewModel
@@ -62,7 +63,8 @@ private fun AppNavigation(configStore: RepoConfigStore, repository: RecipeReposi
                         popUpTo("setup") { inclusive = true }
                     }
                     viewModel.sync()
-                }
+                },
+                onAboutClick = { navController.navigate("about") }
             )
         }
         composable("recipeList") {
@@ -81,8 +83,12 @@ private fun AppNavigation(configStore: RepoConfigStore, repository: RecipeReposi
                 onBack = {
                     navController.popBackStack()
                     viewModel.sync()
-                }
+                },
+                onAboutClick = { navController.navigate("about") }
             )
+        }
+        composable("about") {
+            AboutScreen(onBack = { navController.popBackStack() })
         }
         composable("recipeDetail/{index}") { backStackEntry ->
             val index = backStackEntry.arguments?.getString("index")?.toIntOrNull() ?: 0

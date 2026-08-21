@@ -11,6 +11,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,7 +26,8 @@ import com.walnutgeek.bygrams.domain.RepoConfig
 @Composable
 fun SetupScreen(
     configStore: RepoConfigStore,
-    onSetupComplete: () -> Unit
+    onSetupComplete: () -> Unit,
+    onAboutClick: () -> Unit
 ) {
     var input by remember { mutableStateOf("walnutgeek/recipes") }
     var error by remember { mutableStateOf<String?>(null) }
@@ -72,6 +74,12 @@ fun SetupScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Get Started")
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        TextButton(onClick = onAboutClick) {
+            Text("Don't have a recipe repo yet?")
         }
     }
 }

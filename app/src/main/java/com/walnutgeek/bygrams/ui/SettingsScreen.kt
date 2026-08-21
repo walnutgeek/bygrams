@@ -1,5 +1,6 @@
 package com.walnutgeek.bygrams.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,8 +11,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -34,7 +37,8 @@ import com.walnutgeek.bygrams.domain.RepoConfig
 @Composable
 fun SettingsScreen(
     configStore: RepoConfigStore,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onAboutClick: () -> Unit
 ) {
     val currentConfig = configStore.getConfig()
     var input by remember { mutableStateOf(currentConfig?.toDisplayString() ?: "") }
@@ -107,6 +111,25 @@ fun SettingsScreen(
                         showGrams = enabled
                         configStore.setShowGramsEnabled(enabled)
                     }
+                )
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            HorizontalDivider()
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(onClick = onAboutClick)
+                    .padding(vertical = 16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("About ByGrams")
+                Icon(
+                    Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = null
                 )
             }
         }

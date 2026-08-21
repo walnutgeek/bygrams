@@ -15,7 +15,7 @@ An Android app for viewing and scaling recipes stored as YAML files in a public 
 
 Recipes are YAML files following a [simple schema](docs/recipe-schema.md). See [walnutgeek/recipes](https://github.com/walnutgeek/recipes) for an example repo.
 
-## Converting recipes with Claude
+## Installing the Claude Code skills
 
 This repo publishes two Claude Code skills for working with recipe repos. Install them
 into your recipe repo with the [`skills`](https://github.com/vercel-labs/skills) CLI:
@@ -25,16 +25,31 @@ cd your-recipes
 npx skills@latest add walnutgeek/bygrams
 ```
 
-- **`/setup-recipe-repo`** — run once. Writes the repo conventions agents need (notably
-  that subdirectories become tags) and can seed starter recipes from
-  [walnutgeek/recipes](https://github.com/walnutgeek/recipes).
-- **`convert-recipe`** — paste a recipe, or give it a URL, and it produces a YAML file
-  in the [schema](docs/recipe-schema.md). Invoked automatically when you paste a recipe.
-
 Installing into the recipe repo (rather than globally, with `-g`) keeps the skills
 alongside the recipes they operate on, so anyone cloning your recipes gets the tooling too.
 
-## Setup
+## Setting up a recipe repo
+
+Create a public GitHub repo and add your recipes as `.yaml` files. Subdirectories become
+tags automatically — a recipe at `indian/tikka.yaml` is tagged `indian`. A
+`conversions.yaml` at the repo root maps ingredient aliases and volume/count units to
+gram weights, which is what powers the app's gram-equivalent toggle.
+
+Run **`/setup-recipe-repo`** once, in the recipe repo, after installing the skills. It
+writes down the conventions agents need (notably that subdirectories become tags) and
+can seed starter recipes from [walnutgeek/recipes](https://github.com/walnutgeek/recipes).
+
+## Converting a recipe from a URL
+
+With the skills installed, hand Claude Code a recipe URL — or just paste the recipe text.
+The **`convert-recipe`** skill fetches it, restructures it into named actions, normalises
+ingredient lines to the gram-first format, and produces a YAML file in the
+[schema](docs/recipe-schema.md). It is invoked automatically when you paste a recipe.
+
+The skill writes the file locally; it does not push. Commit and push, then hit sync in
+the app to pick the recipe up.
+
+## Pointing the app at your repo
 
 Point the app at your GitHub repo as `owner/repo` (e.g., `walnutgeek/recipes`). Recipes are fetched from the `main` branch by default — specify a different branch with `owner/repo:branch`.
 
