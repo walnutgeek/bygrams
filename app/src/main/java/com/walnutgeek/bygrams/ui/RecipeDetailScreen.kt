@@ -306,7 +306,9 @@ private fun ScalingControls(
                     label = { Text("Custom") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     singleLine = true,
-                    modifier = Modifier.width(90.dp)
+                    // Needs to fit the "Custom" label on one line; at 90.dp it wrapped to
+                    // "Custo / m" and the field grew to twice the height of the chips.
+                    modifier = Modifier.width(116.dp)
                 )
             }
         } else {

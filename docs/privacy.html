@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ByGrams — Privacy Policy</title>
+<style>
+  :root {
+    --bg: #faf7f4; --fg: #23201e; --muted: #6b625c;
+    --accent: #B4472B; --rule: #e4dcd5; --card: #fff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#191614; --fg:#ece7e3; --muted:#a79c94;
+            --accent:#e07f63; --rule:#332d29; --card:#211d1a; }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 2.5rem 1.25rem 4rem;
+    background: var(--bg); color: var(--fg);
+    font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  main { max-width: 42rem; margin: 0 auto; }
+  h1 { font-size: 1.9rem; line-height: 1.2; margin: 0 0 .25rem; letter-spacing: -.02em; }
+  h2 { font-size: 1.15rem; margin: 2.25rem 0 .6rem; letter-spacing: -.01em; }
+  .updated { color: var(--muted); font-size: .9rem; margin: 0 0 2rem; }
+  .lede {
+    background: var(--card); border: 1px solid var(--rule);
+    border-left: 4px solid var(--accent);
+    padding: 1rem 1.15rem; border-radius: 8px; margin: 0 0 2rem;
+  }
+  .lede strong { color: var(--accent); }
+  ul { padding-left: 1.15rem; }
+  li { margin: .35rem 0; }
+  a { color: var(--accent); }
+  code {
+    background: var(--card); border: 1px solid var(--rule);
+    padding: .1em .35em; border-radius: 4px; font-size: .9em;
+  }
+  footer {
+    margin-top: 3rem; padding-top: 1.25rem;
+    border-top: 1px solid var(--rule); color: var(--muted); font-size: .9rem;
+  }
+</style>
+</head>
+<body>
+<main>
+
+  <h1>ByGrams — Privacy Policy</h1>
+  <p class="updated">Last updated 22 August 2026</p>
+
+  <p class="lede">
+    <strong>ByGrams collects no personal data.</strong> There are no accounts, no
+    analytics, no advertising, and no tracking of any kind. Nothing you do in the
+    app is reported to the developer or to anyone else.
+  </p>
+
+  <h2>What the app stores</h2>
+  <p>Everything ByGrams saves stays on your device and is removed when you uninstall it:</p>
+  <ul>
+    <li><strong>The recipe repository you choose</strong> — the <code>owner/repo</code>
+        name and branch you enter, plus your gram-display preference.</li>
+    <li><strong>A cache of recipe files</strong> already downloaded, so recipes stay
+        readable without a network connection.</li>
+  </ul>
+  <p>None of it is transmitted anywhere.</p>
+
+  <h2>Network connections</h2>
+  <p>
+    ByGrams makes network requests to one place: GitHub, to download the public
+    recipe files from the repository you pointed it at. Specifically
+    <code>api.github.com</code> and <code>raw.githubusercontent.com</code>.
+  </p>
+  <p>
+    As with any request to any website, GitHub can see your device's IP address and
+    which files were requested. That information goes to GitHub, not to ByGrams, and
+    is handled under
+    <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub's
+    privacy statement</a>. The app sends no identifier of its own, and no account or
+    credential is involved — only public files are read.
+  </p>
+  <p>
+    Tapping a link on the About screen opens your browser at the ByGrams project
+    page. What happens after that is between you and your browser.
+  </p>
+
+  <h2>What the app never does</h2>
+  <ul>
+    <li>No user accounts, sign-in, or profiles</li>
+    <li>No analytics, telemetry, or crash reporting</li>
+    <li>No advertising, and no advertising identifiers</li>
+    <li>No location, contacts, camera, microphone, or file access</li>
+    <li>No selling or sharing of data, because none is collected</li>
+    <li>No writing to your repository — ByGrams only ever reads</li>
+  </ul>
+  <p>
+    The app requests a single Android permission, <code>INTERNET</code>, used solely
+    to fetch the recipe files described above.
+  </p>
+
+  <h2>Children</h2>
+  <p>
+    ByGrams is not directed at children and collects no data from anyone, including
+    children under 13.
+  </p>
+
+  <h2>Verifying this</h2>
+  <p>
+    You do not have to take our word for it. ByGrams is open source under the MIT
+    licence, so the network code and everything it stores can be read in full at
+    <a href="https://github.com/walnutgeek/bygrams">github.com/walnutgeek/bygrams</a>.
+  </p>
+
+  <h2>Changes</h2>
+  <p>
+    If this policy changes, the revised version will be published at this address
+    with an updated date above. The history of every change is in the repository.
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    Questions or concerns:
+    <a href="https://github.com/walnutgeek/bygrams/issues">open an issue</a>
+    on the project repository.
+  </p>
+
+  <footer>
+    ByGrams is free and open source software, MIT licensed.
+    <a href="https://github.com/walnutgeek/bygrams">Source on GitHub</a>.
+  </footer>
+
+</main>
+</body>
+</html>
