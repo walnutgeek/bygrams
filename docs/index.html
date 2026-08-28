@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ByGrams — Cook from your own GitHub repo</title>
+<meta name="description" content="An Android recipe viewer for cooks who measure by weight. Your recipes live as plain YAML in a public GitHub repo you control. Scale any recipe by multiplier or by the amount you actually have.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ByGrams — Cook from your own GitHub repo">
+<meta property="og:description" content="An Android recipe viewer for cooks who measure by weight. Your recipes live as plain YAML in a public GitHub repo you control.">
+<meta property="og:url" content="https://walnutgeek.github.io/bygrams/">
+<meta property="og:image" content="https://walnutgeek.github.io/bygrams/brand/store/feature-graphic-1024x500.png">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+  :root {
+    --bg: #faf7f4; --fg: #23201e; --muted: #6b625c;
+    --accent: #B4472B; --rule: #e4dcd5; --card: #fff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#191614; --fg:#ece7e3; --muted:#a79c94;
+            --accent:#e07f63; --rule:#332d29; --card:#211d1a; }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 2.5rem 1.25rem 4rem;
+    background: var(--bg); color: var(--fg);
+    font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  main { max-width: 42rem; margin: 0 auto; }
+  h1 { font-size: 1.9rem; line-height: 1.2; margin: 0 0 .25rem; letter-spacing: -.02em; }
+  h2 { font-size: 1.15rem; margin: 2.25rem 0 .6rem; letter-spacing: -.01em; }
+  .updated { color: var(--muted); font-size: .9rem; margin: 0 0 2rem; }
+  .lede {
+    background: var(--card); border: 1px solid var(--rule);
+    border-left: 4px solid var(--accent);
+    padding: 1rem 1.15rem; border-radius: 8px; margin: 0 0 2rem;
+  }
+  .lede strong { color: var(--accent); }
+  ul { padding-left: 1.15rem; }
+  li { margin: .35rem 0; }
+  a { color: var(--accent); }
+  code {
+    background: var(--card); border: 1px solid var(--rule);
+    padding: .1em .35em; border-radius: 4px; font-size: .9em;
+  }
+  footer {
+    margin-top: 3rem; padding-top: 1.25rem;
+    border-top: 1px solid var(--rule); color: var(--muted); font-size: .9rem;
+  }
+
+  /* --- landing page additions --- */
+  .masthead { display: flex; align-items: center; gap: 1rem; margin: 0 0 .25rem; }
+  .masthead img { width: 64px; height: 64px; border-radius: 14px; flex: none; }
+  .masthead h1 { margin: 0; }
+  .tagline { color: var(--muted); margin: 0 0 2rem; }
+  .shots {
+    display: flex; gap: .75rem; margin: 1rem 0 0;
+    overflow-x: auto; padding-bottom: .5rem;
+  }
+  .shots figure { margin: 0; flex: 1 1 0; min-width: 9rem; }
+  .shots img {
+    width: 100%; height: auto; display: block;
+    border: 1px solid var(--rule); border-radius: 10px; background: var(--card);
+  }
+  .shots figcaption {
+    color: var(--muted); font-size: .82rem; margin-top: .4rem; text-align: center;
+  }
+  ol { padding-left: 1.3rem; }
+  pre {
+    background: var(--card); border: 1px solid var(--rule);
+    border-radius: 8px; padding: .8rem 1rem; overflow-x: auto; font-size: .88rem;
+  }
+  pre code { background: none; border: 0; padding: 0; font-size: inherit; }
+  footer a { margin-right: .35rem; }
+</style>
+</head>
+<body>
+<main>
+
+  <div class="masthead">
+    <img src="brand/icon.svg" alt="" width="64" height="64">
+    <h1>ByGrams</h1>
+  </div>
+  <p class="tagline">Cook from your own GitHub recipe repo. Weigh in grams, scale to any batch.</p>
+
+  <p class="lede">
+    <strong>An Android recipe viewer for cooks who measure by weight.</strong>
+    Your recipes live as plain YAML in a public GitHub repo that you control —
+    ByGrams only ever reads them. There is no account, nothing to upload, and no
+    way to get locked in.
+  </p>
+
+  <h2>Why weigh?</h2>
+  <p>
+    Cups measure volume, and volume lies. A cup of flour can vary by a third
+    depending on how you scoop it. Grams don't. Weighing is faster, dirties fewer
+    dishes, and turns scaling a recipe into arithmetic the app can do for you.
+  </p>
+
+  <h2>Your recipes stay yours</h2>
+  <p>
+    A recipe is a YAML file — text you can read, edit, diff and back up like any
+    other file in a repo. Subdirectories become tags automatically, so an
+    <code>indian/</code> folder tags everything inside it. Delete the app and your
+    recipes are exactly where you left them.
+  </p>
+
+  <h2>Scaling</h2>
+  <ul>
+    <li>Tap 0.5x, 1.5x, 2x, or type your own multiplier.</li>
+    <li><strong>Anchor scaling</strong> — pick an ingredient, say how much you
+        actually have, and every other quantity follows. "I have 35 g of olive
+        oil" becomes a 2.5x batch.</li>
+    <li>Quantities that can't be scaled exactly are marked, not silently rounded.</li>
+  </ul>
+
+  <h2>In the kitchen</h2>
+  <ul>
+    <li>Recipes are cached on the device, so a patchy signal at the stove doesn't matter.</li>
+    <li>Volume and count measures show gram equivalents alongside the original, using
+        a conversions file in your own repo.</li>
+    <li>Ingredients repeated across steps are totalled into one list.</li>
+    <li>Search by recipe name or by ingredient; filter by tag.</li>
+  </ul>
+
+  <div class="shots">
+    <figure>
+      <img src="brand/store/screenshots/01-list.png" alt="The recipe list, with search and tag filters" loading="lazy" width="1080" height="1920">
+      <figcaption>Your recipes</figcaption>
+    </figure>
+    <figure>
+      <img src="brand/store/screenshots/02-detail.png" alt="A recipe, with ingredients grouped under each named step" loading="lazy" width="1080" height="1920">
+      <figcaption>Step by step</figcaption>
+    </figure>
+    <figure>
+      <img src="brand/store/screenshots/04-anchor.png" alt="Anchor scaling — entering the amount of one ingredient you have" loading="lazy" width="1080" height="1920">
+      <figcaption>Anchor scaling</figcaption>
+    </figure>
+  </div>
+
+  <h2>Getting started</h2>
+  <ol>
+    <li>Create a public GitHub repo.</li>
+    <li>Add your recipes as <code>.yaml</code> files, following the
+        <a href="https://github.com/walnutgeek/bygrams/blob/main/docs/recipe-schema.md">recipe schema</a>.
+        <a href="https://github.com/walnutgeek/recipes">walnutgeek/recipes</a> is a
+        working example you can copy from.</li>
+    <li>Point ByGrams at it as <code>owner/repo</code> — or
+        <code>owner/repo:branch</code> for a branch other than <code>main</code>.</li>
+  </ol>
+  <p>
+    A <code>conversions.yaml</code> at the repo root maps ingredient aliases and
+    volume or count units to gram weights. That file is what teaches the app your
+    own ingredients, and powers the gram-equivalent display.
+  </p>
+
+  <h2>Writing recipes with Claude Code</h2>
+  <p>
+    Two <a href="https://github.com/walnutgeek/bygrams">Claude Code</a> skills are
+    published alongside the app. Neither is required — the format is simple enough
+    to write by hand — but they save the typing:
+  </p>
+  <pre><code>cd your-recipes
+npx skills@latest add walnutgeek/bygrams</code></pre>
+  <ul>
+    <li><code>/setup-recipe-repo</code> scaffolds a new recipe repo and writes down
+        the conventions.</li>
+    <li><code>convert-recipe</code> turns a recipe URL, or pasted recipe text, into
+        a YAML file in the right format.</li>
+  </ul>
+
+  <h2>Installing</h2>
+  <p>
+    ByGrams is not yet published to an app store. For now, build it from source —
+    the <a href="https://github.com/walnutgeek/bygrams">repository</a> has
+    instructions; you'll need JDK 17+ and the Android SDK.
+  </p>
+
+  <footer>
+    ByGrams is free and open source software, MIT licensed.
+    <a href="https://github.com/walnutgeek/bygrams">Source on GitHub</a> ·
+    <a href="https://github.com/walnutgeek/bygrams/blob/main/docs/recipe-schema.md">Recipe schema</a> ·
+    <a href="privacy.html">Privacy policy</a>
+  </footer>
+
+</main>
+</body>
+</html>

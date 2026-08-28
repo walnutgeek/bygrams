@@ -2,6 +2,8 @@
 
 An Android app for viewing and scaling recipes stored as YAML files in a public GitHub repo. Designed for cooks who prefer gram-based measurements — easier to scale, no measuring cups needed.
 
+**[walnutgeek.github.io/bygrams](https://walnutgeek.github.io/bygrams/)** — project page and screenshots.
+
 ## Features
 
 - Fetches recipes from any public GitHub repo
