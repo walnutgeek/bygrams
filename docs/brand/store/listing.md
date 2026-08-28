@@ -92,6 +92,34 @@ displays files from a repo the user chose, but there is no submission, no
 moderation surface, and no communication between users — so it is not UGC in
 the sense the questionnaire means.
 
+## Target audience
+
+Select **13 and over** only. Do not tick any bucket below 13.
+
+The app collects nothing and would satisfy COPPA and GDPR on the merits, but
+the declaration is not just about data. Ticking 9–12 makes the app
+child-directed or mixed-audience, which brings it under Play's Families policy
+— a much larger surface than COPPA alone, and one this app is not built for:
+
+- The recipe repo is arbitrary and unmoderated. `owner/repo` is free text and
+  whatever YAML it contains gets rendered.
+- `SourceItem` in `RecipeDetailScreen.kt` opens `source.url` — an arbitrary URL
+  from that YAML — in the system browser. Families requirements restrict
+  external links out of a child-directed app without a parental gate.
+
+Neither matters for the actual audience. A gram-based recipe viewer that
+requires you to own a GitHub repo has no child appeal to give up, so there is
+nothing to gain by taking on the burden.
+
+Ticking an under-13 bucket would also contradict `docs/privacy.html`, which
+states plainly that ByGrams is not directed at children. Reviewers compare the
+two, and an internal contradiction is a cheap rejection — expensive if it lands
+mid-way through the 14-day closed test.
+
+Note this is a different question from the content rating above. Rating asks
+what is *in* the app (nothing objectionable — Everyone/PEGI 3); target audience
+asks who it is *for*. Everyone-rated does not mean everyone-targeted.
+
 ## Data safety
 
 Declare **no data collected and no data shared**. Accurate as of this version:
