@@ -2,7 +2,7 @@ package com.walnutgeek.bygrams.ui
 
 import com.walnutgeek.bygrams.data.RecipeEntry
 import com.walnutgeek.bygrams.data.RecipeRepository
-import com.walnutgeek.bygrams.data.RepoConfigStore
+import com.walnutgeek.bygrams.domain.RepoConfig
 import com.walnutgeek.bygrams.domain.ParseResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,9 +14,13 @@ import kotlinx.coroutines.launch
 
 class RecipeListViewModel(
     private val repository: RecipeRepository,
-    private val configStore: RepoConfigStore,
-    private val scope: CoroutineScope
+    private val getConfig: () -> RepoConfig?,
+    private val scope: CoroutineScope,
+    private val now: () -> Long = System::currentTimeMillis
 ) {
+
+    /** When the last sync was started, used to throttle the on-resume sync. */
+    private var lastSyncStartedAt: Long? = null
 
     private val _recipes = MutableStateFlow<List<RecipeEntry>>(emptyList())
     val recipes: StateFlow<List<RecipeEntry>> = _recipes
@@ -56,16 +60,23 @@ class RecipeListViewModel(
         _recipes.value = repository.getRecipes()
     }
 
+    /** Syncs now, regardless of how recently the last sync ran. For explicit user actions. */
     fun sync() {
-        val config = configStore.getConfig() ?: return
+        val config = getConfig() ?: return
+        if (_isLoading.value) return
+        lastSyncStartedAt = now()
         scope.launch {
             _isLoading.value = true
             _syncError.value = null
             try {
                 val result = repository.sync(config)
                 loadRecipes()
-                if (result.added == 0 && result.updated == 0 && result.removed == 0 && _recipes.value.isEmpty()) {
-                    _syncError.value = "Couldn't reach ${config.toDisplayString()} — check Logcat tag GitHubApi/RecipeRepository for details"
+                if (result.repoUnreachable) {
+                    _syncError.value = if (_recipes.value.isEmpty()) {
+                        "Couldn't reach ${config.toDisplayString()} — check Logcat tag GitHubApi/RecipeRepository for details"
+                    } else {
+                        "Couldn't reach ${config.toDisplayString()} — showing cached recipes"
+                    }
                 } else if (result.failed > 0) {
                     _syncError.value = "${result.failed} recipe file(s) failed to sync — check Logcat tag RecipeRepository"
                 }
@@ -73,6 +84,17 @@ class RecipeListViewModel(
                 _isLoading.value = false
             }
         }
+    }
+
+    /**
+     * Syncs only if the last sync is older than [MIN_SYNC_INTERVAL_MS]. Called when the app
+     * returns to the foreground, where a sync on every resume would be wasteful — GitHub's
+     * tree API is edge-cached for 60s anyway, and unauthenticated calls are capped at 60/hour.
+     */
+    fun syncIfStale() {
+        val last = lastSyncStartedAt
+        if (last != null && now() - last < MIN_SYNC_INTERVAL_MS) return
+        sync()
     }
 
     fun setSearchQuery(query: String) {
@@ -84,6 +106,10 @@ class RecipeListViewModel(
     }
 
     companion object {
+
+        /** Minimum gap between automatic on-resume syncs. */
+        const val MIN_SYNC_INTERVAL_MS = 60_000L
+
         fun getAllTags(entry: RecipeEntry): List<String> {
             val folderTags = deriveFolderTags(entry.path)
             val yamlTags = when (val r = entry.result) {

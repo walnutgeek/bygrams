@@ -196,14 +196,72 @@ class RecipeRepositoryTest {
         assertEquals(1, recipes.size)
         assertTrue(recipes[0].result is ParseResult.RawText)
     }
+
+    @Test
+    fun `failed tree fetch keeps cached recipes`() = runBlocking {
+        fakeApi.treeEntries = listOf(
+            TreeEntry("a.yaml", "sha1", "blob"),
+            TreeEntry("b.yaml", "sha2", "blob")
+        )
+        fakeApi.fileContents = mapOf(
+            "a.yaml" to "name: A\nactions:\n  - name: do",
+            "b.yaml" to "name: B\nactions:\n  - name: do"
+        )
+        repo.sync(config)
+        assertEquals(2, repo.getRecipes().size)
+
+        // Network failure / rate limit — fetchTree returns null
+        fakeApi.treeEntries = null
+        val result = repo.sync(config)
+
+        assertTrue(result.repoUnreachable)
+        assertEquals(0, result.removed)
+        assertEquals(2, repo.getRecipes().size)
+    }
+
+    @Test
+    fun `failed tree fetch does not refetch file contents`() = runBlocking {
+        fakeApi.treeEntries = listOf(TreeEntry("a.yaml", "sha1", "blob"))
+        fakeApi.fileContents = mapOf("a.yaml" to "name: A\nactions:\n  - name: do")
+        repo.sync(config)
+        fakeApi.fetchCount = 0
+
+        fakeApi.treeEntries = null
+        repo.sync(config)
+
+        assertEquals(0, fakeApi.fetchCount)
+    }
+
+    @Test
+    fun `genuinely empty repo still removes cached recipes`() = runBlocking {
+        fakeApi.treeEntries = listOf(TreeEntry("a.yaml", "sha1", "blob"))
+        fakeApi.fileContents = mapOf("a.yaml" to "name: A\nactions:\n  - name: do")
+        repo.sync(config)
+
+        // Empty list is not the same as null — every file really was deleted upstream.
+        fakeApi.treeEntries = emptyList()
+        val result = repo.sync(config)
+
+        assertFalse(result.repoUnreachable)
+        assertEquals(1, result.removed)
+        assertEquals(0, repo.getRecipes().size)
+    }
+
+    @Test
+    fun `successful sync reports repo as reachable`() = runBlocking {
+        fakeApi.treeEntries = listOf(TreeEntry("a.yaml", "sha1", "blob"))
+        fakeApi.fileContents = mapOf("a.yaml" to "name: A\nactions:\n  - name: do")
+
+        assertFalse(repo.sync(config).repoUnreachable)
+    }
 }
 
 class FakeGitHubApi : GitHubApi() {
-    var treeEntries: List<TreeEntry> = emptyList()
+    var treeEntries: List<TreeEntry>? = emptyList()
     var fileContents: Map<String, String> = emptyMap()
     var fetchCount: Int = 0
 
-    override suspend fun fetchTree(config: RepoConfig): List<TreeEntry> {
+    override suspend fun fetchTree(config: RepoConfig): List<TreeEntry>? {
         return treeEntries
     }
 

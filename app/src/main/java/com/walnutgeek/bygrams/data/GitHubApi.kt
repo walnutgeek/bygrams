@@ -13,7 +13,12 @@ private const val TAG = "GitHubApi"
 
 open class GitHubApi {
 
-    open suspend fun fetchTree(config: RepoConfig): List<TreeEntry> = withContext(Dispatchers.IO) {
+    /**
+     * Returns the repo tree, or null if it could not be fetched. A null result means
+     * "unknown" and must not be confused with an empty list, which means "repo has no files"
+     * and legitimately causes cached recipes to be dropped.
+     */
+    open suspend fun fetchTree(config: RepoConfig): List<TreeEntry>? = withContext(Dispatchers.IO) {
         val url = "https://api.github.com/repos/${config.owner}/${config.repo}/git/trees/${config.branch}?recursive=1"
         val connection = (URL(url).openConnection() as HttpURLConnection).apply {
             requestMethod = "GET"
@@ -26,7 +31,7 @@ open class GitHubApi {
             if (responseCode != HttpURLConnection.HTTP_OK) {
                 val errorBody = connection.errorStream?.bufferedReader()?.use { it.readText() }
                 Log.e(TAG, "fetchTree failed for ${config.toDisplayString()}: HTTP $responseCode $url\n$errorBody")
-                return@withContext emptyList()
+                return@withContext null
             }
             val body = connection.inputStream.bufferedReader().use { it.readText() }
             val json = JSONObject(body)
@@ -46,7 +51,7 @@ open class GitHubApi {
             entries
         } catch (e: IOException) {
             Log.e(TAG, "fetchTree threw for ${config.toDisplayString()}: $url", e)
-            emptyList()
+            null
         } finally {
             connection.disconnect()
         }

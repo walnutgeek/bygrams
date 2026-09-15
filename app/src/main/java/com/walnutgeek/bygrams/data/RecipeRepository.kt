@@ -14,8 +14,12 @@ class RecipeRepository(
 
     suspend fun sync(config: RepoConfig): SyncResult {
         val tree = api.fetchTree(config)
-        if (tree.isEmpty()) {
-            Log.w(TAG, "sync: fetchTree returned no entries for ${config.toDisplayString()} — see GitHubApi logs above for the cause")
+        if (tree == null) {
+            // The tree fetch failed, so we know nothing about what the repo currently holds.
+            // Bail out before the removal pass below, which would otherwise read the absence
+            // of remote entries as "every recipe was deleted" and wipe the offline cache.
+            Log.w(TAG, "sync: could not reach ${config.toDisplayString()} — keeping cached recipes; see GitHubApi logs above for the cause")
+            return SyncResult(added = 0, updated = 0, removed = 0, failed = 0, repoUnreachable = true)
         }
 
         val yamlEntries = tree.filter { entry ->

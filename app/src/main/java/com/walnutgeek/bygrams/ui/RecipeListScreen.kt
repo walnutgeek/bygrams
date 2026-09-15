@@ -31,6 +31,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
@@ -145,37 +146,50 @@ fun RecipeListScreen(
             }
 
             // Content
-            when {
-                isLoading && allRecipes.isEmpty() -> {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator()
+            PullToRefreshBox(
+                isRefreshing = isLoading,
+                onRefresh = { viewModel.sync() },
+                modifier = Modifier.fillMaxSize()
+            ) {
+                when {
+                    isLoading && allRecipes.isEmpty() -> {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
                     }
-                }
-                filteredRecipes.isEmpty() && !isLoading -> {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text("No recipes loaded")
+                    filteredRecipes.isEmpty() && !isLoading -> {
+                        // A LazyColumn rather than a plain Box so the empty state still accepts
+                        // the pull gesture — that is exactly when you want to retry the sync.
+                        LazyColumn(modifier = Modifier.fillMaxSize()) {
+                            item {
+                                Box(
+                                    modifier = Modifier
+                                        .fillParentMaxSize(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text("No recipes loaded")
+                                }
+                            }
+                        }
                     }
-                }
-                else -> {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                        contentPadding = androidx.compose.foundation.layout.PaddingValues(
-                            horizontal = 16.dp,
-                            vertical = 8.dp
-                        )
-                    ) {
-                        items(filteredRecipes, key = { it.path }) { entry ->
-                            RecipeCard(
-                                entry = entry,
-                                onClick = { onRecipeClick(entry) }
+                    else -> {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize(),
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                            contentPadding = androidx.compose.foundation.layout.PaddingValues(
+                                horizontal = 16.dp,
+                                vertical = 8.dp
                             )
+                        ) {
+                            items(filteredRecipes, key = { it.path }) { entry ->
+                                RecipeCard(
+                                    entry = entry,
+                                    onClick = { onRecipeClick(entry) }
+                                )
+                            }
                         }
                     }
                 }

@@ -22,6 +22,10 @@ import com.walnutgeek.bygrams.ui.RecipeListViewModel
 import com.walnutgeek.bygrams.ui.SetupScreen
 import com.walnutgeek.bygrams.ui.SettingsScreen
 import com.walnutgeek.bygrams.ui.theme.ByGramsTheme
+import androidx.compose.runtime.DisposableEffect
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import java.io.File
 
 class MainActivity : ComponentActivity() {
@@ -46,12 +50,26 @@ private fun AppNavigation(configStore: RepoConfigStore, repository: RecipeReposi
 
     val scope = rememberCoroutineScope()
     val viewModel = remember {
-        RecipeListViewModel(repository, configStore, scope).also {
+        RecipeListViewModel(repository, configStore::getConfig, scope).also {
             it.loadRecipes()
             if (configStore.getConfig() != null) {
                 it.sync()
             }
         }
+    }
+
+    // Re-sync when the app returns to the foreground. Without this, a warm resume reuses the
+    // remembered ViewModel and never syncs, so the list can sit on stale content indefinitely.
+    // syncIfStale() throttles, so the ON_RESUME that fires on first composition is a no-op here.
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                viewModel.syncIfStale()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
 
     NavHost(navController = navController, startDestination = startDestination) {
